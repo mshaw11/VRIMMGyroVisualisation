@@ -11,11 +11,12 @@ public class GyroOrientation : MonoBehaviour
     public Color c2 = Color.red;
 
     private Vector3 defaultPosition = new Vector3(270, 0, 0);
-    private Quaternion rotationOffset = new Quaternion();
+    private Quaternion offset = new Quaternion();
 
     // Start is called before the first frame update
     void Start()
     {
+        offset = Quaternion.identity;
         gyro = Input.gyro;
         gyro.enabled = true;
         lineRenderer = gameObject.AddComponent<LineRenderer>();
@@ -45,7 +46,7 @@ public class GyroOrientation : MonoBehaviour
         //if angle is big enough
         // transform.rotation *= gyroDelta;
 
-        transform.rotation = gyro.attitude;
+        transform.rotation = gyro.attitude * offset;
         lineRenderer.SetPosition(0, transform.position);
         lineRenderer.SetPosition(1, transform.position + transform.forward * 20);
         //Debug.DrawRay(transform.position, transform.forward * 20, Color.blue, 1.0f, false);
@@ -62,15 +63,11 @@ public class GyroOrientation : MonoBehaviour
         var objectRotation = transform.rotation;
         //qDelta = qTo * qFrom.inverse()
         var deltaRotation = gyroRotation * Quaternion.Inverse(objectRotation);
-        Debug.Log("X is: " + deltaRotation.x + ". Y is: " + deltaRotation.y + ". Z is: " + deltaRotation.z);
         return deltaRotation;
     }
 
     public void Recentre()
     {
-        //Old attempt
-        //rotationOffset = Quaternion.Inverse(GyroToUnity(gyro.attitude));
-        transform.rotation *= Quaternion.Euler(defaultPosition);
-
+        offset = Quaternion.FromToRotation(transform.rotation.eulerAngles, defaultPosition);
     }
 }
