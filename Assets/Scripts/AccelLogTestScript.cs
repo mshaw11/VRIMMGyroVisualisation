@@ -7,7 +7,6 @@ public class AccelLogTestScript : MonoBehaviour
 {
 
     PersistentSave rawAccelFile = new PersistentSave();
-    GyroAttitudeWrapper gyroWrapper = new GyroAttitudeWrapper();
     private List<GyroSample> samples = new List<GyroSample>();
     PersistentSave wrappedOutput = new PersistentSave();
 
@@ -23,7 +22,7 @@ public class AccelLogTestScript : MonoBehaviour
     {
         ReadAccelFile();
         Debug.Log("Count is " + samples.Count);
-        var wrappedSamples = gyroWrapper.WrapGyroValues(samples);
+        var wrappedSamples = GyroAttitudeWrapper.WrapGyroValues(samples);
         wrappedOutput.OpenFileToWrite("Assets/AccelLogs/output.txt");
         foreach (var sample in wrappedSamples)
         {

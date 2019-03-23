@@ -7,21 +7,22 @@ using UnityEngine;
 public class GyroAttitudeWrapper : MonoBehaviour
 {
 
-    List<GyroSample> wrappedSamples;
-
-    public List<GyroSample> WrapGyroValues(List<GyroSample> samples)
+    public static List<GyroSample> WrapGyroValues(List<GyroSample> samples)
     {
-
-        wrappedSamples = new List<GyroSample>();
-        var xRolls = 0;
-        var yRolls = 0;
-        var zRolls = 0;
+        List<GyroSample> wrappedSamples = new List<GyroSample>();
+        var xRollMultiplier = 0;
+        var yRollMultiplier = 0;
+        var zRollMultiplier = 0;
 
         for (int i = 0; i < samples.Count; i++)
         {
             var adjustedSample = new GyroSample(0.0f, 0.0f, 0.0f);
             if (i == 0)
             {
+                adjustedSample.x = samples[i].x;
+                adjustedSample.y = samples[i].y;
+                adjustedSample.z = samples[i].z;
+                wrappedSamples.Add(adjustedSample);
                 continue;
             }
 
@@ -29,33 +30,34 @@ public class GyroAttitudeWrapper : MonoBehaviour
             var yDelta = samples[i].y - samples[i - 1].y;
             var zDelta = samples[i].z - samples[i - 1].z;
 
-            xRolls = AdjustForRoll(xDelta, xRolls);
-            yRolls = AdjustForRoll(xDelta, yRolls);
-            zRolls = AdjustForRoll(xDelta, zRolls);
+            xRollMultiplier = AdjustForRoll(xDelta, xRollMultiplier);
+            yRollMultiplier = AdjustForRoll(yDelta, yRollMultiplier);
+            zRollMultiplier = AdjustForRoll(zDelta, zRollMultiplier);
 
-            adjustedSample.x = samples[i].x + xRolls * 2;
-            adjustedSample.y = samples[i].y + yRolls * 2;
-            adjustedSample.z = samples[i].z + zRolls * 2;
+            adjustedSample.x = samples[i].x + xRollMultiplier * 2;
+            adjustedSample.y = samples[i].y + yRollMultiplier * 2;
+            adjustedSample.z = samples[i].z + zRollMultiplier * 2;
+
             wrappedSamples.Add(adjustedSample);
         }
         return wrappedSamples;
     }
 
-    private int AdjustForRoll(float delta, int rollCount)
+    private static int AdjustForRoll(float delta, int rollMultiplier)
     {
         //If roll occured
         if (Mathf.Abs(delta) > 1)
         {
-            //If positive roll
+            //If positive rollover
             if (delta > 0)
             {
-                rollCount++;
+                rollMultiplier--;
             }
             else
             {
-                rollCount--;
+                rollMultiplier++;
             }
         }
-        return rollCount;
+        return rollMultiplier;
     }
 }
