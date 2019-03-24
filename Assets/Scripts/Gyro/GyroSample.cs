@@ -4,6 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/**
+ *  Simple class for keeping gyro records.
+ *  This could be changed to hold a Vector3.
+ *  Author: Matthew Shaw
+ */
+
 public class GyroSample
 {
     public float x, y, z;

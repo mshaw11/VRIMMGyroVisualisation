@@ -9,7 +9,7 @@ public class AccelLogTestScript : MonoBehaviour
     PersistentSave rawAccelFile = new PersistentSave();
     private List<GyroSample> samples = new List<GyroSample>();
     PersistentSave wrappedOutput = new PersistentSave();
-
+    GyroAttitudeWrapper wrapper = new GyroAttitudeWrapper();
     // Start is called before the first frame update
     void Start()
     {
@@ -22,13 +22,26 @@ public class AccelLogTestScript : MonoBehaviour
     {
         ReadAccelFile();
         Debug.Log("Count is " + samples.Count);
-        var wrappedSamples = GyroAttitudeWrapper.WrapGyroValues(samples);
+        // var wrappedSamples = GyroAttitudeWrapper.WrapGyroValues(samples);
+
+
         wrappedOutput.OpenFileToWrite("Assets/AccelLogs/output.txt");
-        foreach (var sample in wrappedSamples)
+        foreach (var rawSample in samples)
         {
-            wrappedOutput.WriteToFile(sample.ToCsv());
+            var adjustedSample = wrapper.WrapAttitudeValue(rawSample);
+            wrappedOutput.WriteToFile(adjustedSample.ToCsv());
         }
         wrappedOutput.CloseFile();
+        Debug.Log("Finished writing....");
+
+
+
+        //wrappedOutput.OpenFileToWrite("Assets/AccelLogs/output.txt");
+        //foreach (var sample in wrappedSamples)
+        //{
+        //    wrappedOutput.WriteToFile(sample.ToCsv());
+        //}
+        //wrappedOutput.CloseFile();
     }
 
     public void ReadAccelFile()

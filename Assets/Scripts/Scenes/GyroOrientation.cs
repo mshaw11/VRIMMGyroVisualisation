@@ -6,6 +6,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/**
+ * Class to form the foundation of a VRIMM gyroscope test app.
+ * The app will dynamically segment a gyroscope recording into points and then use this to play notes and chords. 
+ */
+
 public class GyroOrientation : MonoBehaviour
 {
 
