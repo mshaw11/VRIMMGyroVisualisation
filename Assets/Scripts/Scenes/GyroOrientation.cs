@@ -22,6 +22,8 @@ public class GyroOrientation : MonoBehaviour
     //Gyro Stuff
     Gyroscope gyro;
     private List<GyroSample> samples = new List<GyroSample>();
+    
+    //Segmentation Stuff
 
 
     //Line Renderer Stuff
@@ -85,6 +87,20 @@ public class GyroOrientation : MonoBehaviour
     {
         recordButtonText.text = "Record";
         fileSystem.CloseFile();
+        ProcessAndSegmentGyro();
+    }
+
+    public void EnterMusicMode()
+    {
+
+    }
+
+    public void ProcessAndSegmentGyro()
+    {
+        var wrappedSamples = GyroAttitudeWrapper.WrapAttitudeValues(samples);
+        GyroLinearSegmentation segmentation = new GyroLinearSegmentation(wrappedSamples);
+        segmentation.CalculateSegments(8);
+        var segments = segmentation.GetSegments();
     }
 
     public void Recentre()
