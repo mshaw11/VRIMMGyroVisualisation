@@ -4,15 +4,31 @@ using UnityEngine;
 
 public class MusicPlayer : MonoBehaviour
 {
+    public enum Notes
+    {
+        A,
+        B,
+        C,
+        D,
+        E,
+        F,
+        G
+    }
+
+    [SerializeField]
+    private List<AudioClip> notes;
+
+    AudioSource audioSource;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        audioSource = gameObject.AddComponent(typeof(AudioSource)) as AudioSource;
+        audioSource.pitch = 2.0f;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Play(Notes note)
     {
-        
+        audioSource.PlayOneShot(notes[(int)note]);
     }
 }

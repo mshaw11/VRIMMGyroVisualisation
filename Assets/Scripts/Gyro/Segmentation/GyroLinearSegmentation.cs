@@ -20,7 +20,7 @@ public class GyroLinearSegmentation
         var count = _samples.Count;
 
         Vector3 firstSample = new Vector3(_samples[0].x, _samples[0].y, _samples[0].z);
-        Vector3 lastSample = new Vector3(_samples[count].x, _samples[count].y, _samples[count].z);
+        Vector3 lastSample = new Vector3(_samples[count-1].x, _samples[count-1].y, _samples[count-1].z);
 
         var line = lastSample - firstSample;
         var lineNormalised = line.normalized;
