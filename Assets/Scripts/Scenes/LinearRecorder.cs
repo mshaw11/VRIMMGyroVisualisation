@@ -14,17 +14,25 @@ namespace Assets.Scripts
         void Start()
         {
             fileSystem.OpenFileToWrite(Application.persistentDataPath + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss") + ".txt");
+
         }
 
         // Update is called once per frame
         void Update()
         {
-            fileSystem.WriteToFile(ToCsv(Input.acceleration.x, Input.acceleration.y, Input.acceleration.z));
+            foreach (var accel in Input.accelerationEvents)
+            {
+                fileSystem.WriteToFile(ToCsv(accel.acceleration.x, accel.acceleration.y, accel.acceleration.z, accel.deltaTime));
+            }
         }
 
         public string ToCsv(float x, float y , float z)
         {
             return x.ToString() + ", " + y.ToString() + ", " + z.ToString() + "\n";
+        }
+        public string ToCsv(float x, float y, float z, float deltaTime)
+        {
+            return x.ToString() + ", " + y.ToString() + ", " + z.ToString() + ", " + deltaTime.ToString() + "\n";
         }
     }
 }

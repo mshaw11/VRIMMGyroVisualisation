@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LinearSample : MonoBehaviour
+public class LinearSample
 {
     public float x, y, z;
     public LinearSample(float x, float y, float z)
